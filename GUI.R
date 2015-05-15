@@ -16,18 +16,18 @@ File <- function(filename) {
 f <- filename
 f1 <- unlist(strsplit(f, ".", fixed = TRUE))[2]		
 ifelse (f1 == "xls", mydata <- read.xls(filename, sheetIndex = 1),
-  ifelse (f1 == "xlsx", mydata <- read.xlsx(filename, sheetIndex = 1), 
-    ifelse (f1 == "csv", mydata <- read.csv(filename, header=TRUE,sep="\t"),
-      mydata <- read.delim(filename, header = TRUE, sep = "\t", dec = ".", fill = TRUE))))
+  	ifelse (f1 == "xlsx", mydata <- read.xlsx(filename, sheetIndex = 1), 
+    		ifelse (f1 == "csv", mydata <- read.csv(filename, header=TRUE,sep="\t"),
+      			mydata <- read.delim(filename, header = TRUE, sep = "\t", dec = ".", fill = TRUE))))
 return(mydata)
 }
 	
 chooseFile <- function() {
 x <- gfile("Select a file", type="open", filter = list("All files" = list(patterns = c("*")),
-	"Excel files" = list(patterns = c("*.xls", "*.xlsx")),
-        "CSV files" = list(patterns = c("*.csv"))),
-	handler = function(h,...)
-	mydata <- File(h$file))
+	   "Excel files" = list(patterns = c("*.xls", "*.xlsx")),
+	   "CSV files" = list(patterns = c("*.csv"))),
+	   handler = function(h,...)
+	   mydata <- File(h$file))
 x <- File(x)
 return(x)
 }
@@ -35,41 +35,41 @@ return(x)
 mbl <- list()
 mbl$File$Open$handler = function(h,...) {
   mydata <- chooseFile()
-  attach(mydata)
-  obj2 <- gtable(mydata,container = w,expand=TRUE)
+  attach (mydata)
+  obj2 <- gtable(mydata, container = w, expand = TRUE)
   a <- colnames(mydata)
   obj1 <- glabel("", container = group)
-  svalue(obj1) <- paste("Количество наблюдений","=",nrow(mydata))
+  svalue(obj1) <- paste("Количество наблюдений", "=", nrow(mydata))
 			
-  obj4 <- gframe("Построение модели", container=group)
-  obj <- gframe("Зависимые переменные", container=obj4)
-  variables <- gradio(a, container=obj)
-  obj <- gframe("Независимые переменные", container=obj4)
+  obj4 <- gframe("Построение модели", container = group)
+  obj <- gframe("Зависимые переменные", container = obj4)
+  variables <- gradio(a, container = obj)
+  obj <- gframe("Независимые переменные", container = obj4)
   invar <- gcheckboxgroup(a, container=obj)
 		
-  obj4 <- gframe("Альфа/Гамма внешнего критерия", container=group)
+  obj4 <- gframe("Альфа/Гамма внешнего критерия", container = group)
   A <- gedit(0.5, container = obj4)
   Y <- gedit(0.5, container = obj4)
 
-  obj4 <- gframe("Соотношение по выборкам,%", container=group)
+  obj4 <- gframe("Соотношение по выборкам,%", container = group)
   nA <- gedit(60, container = obj4)
   nB <- gedit(30, container = obj4)
   nC <- gedit(10, container = obj4)
 
-  obj4 <- gframe("Соотношение балансов в классах,%", container=group)
+  obj4 <- gframe("Соотношение балансов в классах,%", container = group)
   N <- gedit(60, container = obj4)
   M <- gedit(40, container = obj4)
 			
-  obj4 <- gframe("Дополнительно", horizontal = FALSE, container=group)
-  obj5 <- gframe("Свойства моделей", horizontal = TRUE, container=obj4)
-  obj <- gframe("Количество моделей для вывода", container=obj5)
+  obj4 <- gframe("Дополнительно", horizontal = FALSE, container = group)
+  obj5 <- gframe("Свойства моделей", horizontal = TRUE, container = obj4)
+  obj <- gframe("Количество моделей для вывода", container = obj5)
   nMod <- gedit(5, container = obj)
   obj <- gframe("Значение факторной переменной", container = obj5)
-  zY<-gedit( , initial.msg="Введите значения через запятую", container = obj)
+  zY<-gedit( , initial.msg = "Введите значения через запятую", container = obj)
 		
-  objY <- gcheckboxgroup("Уравнять наблюдения в классах", checked = TRUE, container=obj4)
+  objY <- gcheckboxgroup("Уравнять наблюдения в классах", checked = TRUE, container = obj4)
 		
-  objG <- gcheckboxgroup("Ввести расширеную матрицу переменных", checked = TRUE, container=obj4)
+  objG <- gcheckboxgroup("Ввести расширеную матрицу переменных", checked = TRUE, container = obj4)
 		
   obj <- gbutton("Старт", container = group, handler = function(h,...) {
     m <- svalue(invar)
@@ -94,7 +94,7 @@ mbl$File$Open$handler = function(h,...) {
     }
     
     for(i in 1:length(mydata)) {
-      ifelse(mydata[[i]] == factor.var, mydata <- subset(mydata, select= -i),next)
+      ifelse(mydata[[i]] == factor.var, mydata <- subset(mydata, select = -i), next)
     } 
     mydata <- cbind(mydata, y)
     mydata.exam <- mydata
@@ -114,7 +114,7 @@ mbl$File$Open$handler = function(h,...) {
     }
 
     f <- regression(mydata, as.numeric(svalue(nA)), as.numeric(svalue(nB)),
-      as.numeric(svalue(A)), as.numeric(svalue(Y)), full.model, as.numeric(svalue(nMod)))
+      		    as.numeric(svalue(A)), as.numeric(svalue(Y)), full.model, as.numeric(svalue(nMod)))
     model   <- NULL
     in.krit <- NULL
     p.enter <- NULL
