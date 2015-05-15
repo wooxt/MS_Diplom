@@ -114,7 +114,7 @@ mbl$File$Open$handler = function(h,...) {
     }
 
     f <- regression(mydata, as.numeric(svalue(nA)), as.numeric(svalue(nB)),
-				 as.numeric(svalue(A)), as.numeric(svalue(Y)), full.model, as.numeric(svalue(nMod)))
+      as.numeric(svalue(A)), as.numeric(svalue(Y)), full.model, as.numeric(svalue(nMod)))
     model   <- NULL
     in.krit <- NULL
     p.enter <- NULL
